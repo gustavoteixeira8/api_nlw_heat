@@ -21,14 +21,11 @@ app.use(cors());
 app.use(routes);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log(error);
-
-
   if (error instanceof AppError) {
     return res.status(error.status).json({ error: error.error, status: error.status });
   }
 
   return res.status(500).json({ error: 'Internal server error', status: 500 });
-})
+});
 
 export { serverHttp, io };
