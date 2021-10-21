@@ -13,7 +13,7 @@ export class CreateMessageController {
 
       const messageData = {
         message: { text: result.text, user_id: result.user_id },
-        user: { name: result.user.name, avatar_url: result.user.avatar_url },
+        user: { login: result.user.login, avatar_url: result.user.avatar_url },
       }
 
       io.emit('new_message', messageData);
