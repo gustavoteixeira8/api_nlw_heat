@@ -1,6 +1,7 @@
 import axios from "axios";
 import { prismaClient } from "../prisma";
 import { sign } from 'jsonwebtoken';
+import { AppError } from "../errors/AppError";
 
 export interface AccessTokenResponse {
   access_token: string;
@@ -28,12 +29,16 @@ export class AuthenticateUserService {
       headers: {
         Accept: 'application/json',
       },
-    });
+    }).catch((error) => {
+      throw new AppError(error.message, error.response.status || 400)
+    });;
 
     const urlToUserData = 'https://api.github.com/user';
 
     const response = await axios.get<UserDataProtocol>(urlToUserData, {
       headers: { authorization: `Bearer ${accessTokenResponse.access_token}` }
+    }).catch((error) => {
+      throw new AppError(error.message, error.response.status || 400)
     });
 
     const { avatar_url, id, login } = response.data;
